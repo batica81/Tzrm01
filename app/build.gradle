@@ -27,5 +27,7 @@ dependencies {
     compile "commons-io:commons-io:2.5"
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
+    // https://mvnrepository.com/artifact/com.cedarsoftware/json-io
+    compile group: 'com.cedarsoftware', name: 'json-io', version: '4.9.10'
     testCompile 'junit:junit:4.12'
 }

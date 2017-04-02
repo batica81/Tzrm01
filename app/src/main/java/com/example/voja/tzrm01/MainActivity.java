@@ -7,20 +7,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import com.cedarsoftware.util.io.JsonWriter;
 import org.apache.commons.io.IOUtils;
-
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 
 public class MainActivity extends AppCompatActivity {
 
     private EditText mSearchBoxEditText;
     private TextView myTextView;
 
+    private String username =  "voja_3079";
+    private String password = "testpass123";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         myTextView = (TextView) findViewById(R.id.tv_url_display);
         Button button1 = (Button) findViewById(R.id.button1);
 
+//Iskljucivanje networking on main thread provere
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -43,25 +48,35 @@ public class MainActivity extends AppCompatActivity {
                     makeSearch();
                 } catch (IOException e) {
                     e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-
             }
         });
     }
 
-
-
-    private void makeSearch() throws IOException {
+    private void makeSearch() throws IOException, JSONException {
         String myUrl = String.valueOf(mSearchBoxEditText.getText());
         URL url = new URL(myUrl);
-        URLConnection urlConnection = url.openConnection();
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setRequestMethod("POST");
+        urlConnection.setDoInput(true);
+        urlConnection.setDoOutput(true);
+        urlConnection.setRequestProperty("Accept", "application/json");
+        urlConnection.setRequestProperty("Content-Type", "application/json");
+        JSONObject myJsonData = new JSONObject();
+        myJsonData.put("Username", username);
+        myJsonData.put("Password", password);
+        String jsonString = myJsonData.toString();
+
+        byte[] outputBytes = jsonString.getBytes("UTF-8");
+        OutputStream os = urlConnection.getOutputStream();
+        os.write(outputBytes);
+
         InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-
-//        copyInputStreamToOutputStream(in, System.out);
-        myTextView.setText(IOUtils.toString(in));
-
-
-//        myTextView.setText("YO!");
+        String jsonString2 = IOUtils.toString(in);
+        String jsonString3 = JsonWriter.formatJson(jsonString2);
+        myTextView.setText(jsonString3);
+        urlConnection.disconnect();
     }
-
 }

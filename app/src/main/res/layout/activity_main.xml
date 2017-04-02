@@ -10,32 +10,38 @@
 
     <Button
         android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
         android:onClick="onClick"
-        android:layout_width="121dp"
-        android:layout_height="20dp"
-        android:layout_weight="0.06"
-        android:ellipsize="middle"
-        android:text="Button"
+
+        android:text="@string/b1_label"
         tools:layout_editor_absoluteX="147dp"
         tools:layout_editor_absoluteY="406dp" />
 
     <EditText
         android:id="@+id/editText01"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="https://jsonplaceholder.typicode.com/users"
+        android:text="@string/url"
         tools:layout_editor_absoluteX="83dp"
         tools:layout_editor_absoluteY="122dp" />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
     <TextView
         android:id="@+id/tv_url_display"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Click search and your URL will show up here!"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:text="@string/filler"
         android:textSize="22sp" />
+    </ScrollView>
 
 
 </LinearLayout>
