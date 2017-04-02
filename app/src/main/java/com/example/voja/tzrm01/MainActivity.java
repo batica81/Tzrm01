@@ -15,16 +15,20 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.cert.Certificate;
+import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity {
 
     private EditText mSearchBoxEditText;
+    private EditText usernameEditText;
+    private EditText passwordEditText;
     private TextView myTextView;
+    private Certificate[] sviSertifikati;
 
-    private String username =  "voja_3079";
-    private String password = "testpass123";
+    private String username =  "";
+    private String password = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +36,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mSearchBoxEditText = (EditText) findViewById(R.id.editText01);
+        usernameEditText = (EditText) findViewById(R.id.editText);
+        passwordEditText = (EditText) findViewById(R.id.editText2);
         myTextView = (TextView) findViewById(R.id.tv_url_display);
         Button button1 = (Button) findViewById(R.id.button1);
+        Button button2 = (Button) findViewById(R.id.button2);
+        Button button3 = (Button) findViewById(R.id.button3);
 
 //Iskljucivanje networking on main thread provere
 
@@ -53,12 +61,38 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                try {
+                    showCert();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        button3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                try {
+                    killIt();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void makeSearch() throws IOException, JSONException {
+        username = String.valueOf(usernameEditText.getText());
+        password = String.valueOf(passwordEditText.getText());
         String myUrl = String.valueOf(mSearchBoxEditText.getText());
         URL url = new URL(myUrl);
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
         urlConnection.setRequestMethod("POST");
         urlConnection.setDoInput(true);
         urlConnection.setDoOutput(true);
@@ -77,6 +111,22 @@ public class MainActivity extends AppCompatActivity {
         String jsonString2 = IOUtils.toString(in);
         String jsonString3 = JsonWriter.formatJson(jsonString2);
         myTextView.setText(jsonString3);
+
+        sviSertifikati = urlConnection.getServerCertificates();
         urlConnection.disconnect();
+    }
+
+    private void showCert() throws IOException, JSONException{
+
+
+        myTextView.setText(sviSertifikati[0].toString());
+
+    }
+
+    private void killIt() throws IOException, JSONException{
+
+
+        System.exit(0);
+
     }
 }
