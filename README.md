@@ -4,4 +4,4 @@ Aplikacija se konektuje na predefinisani server i razmenjuje podatke u JSON form
 
 Postoji mogućnost prikaza detalja serverskog sertifikata.
 
-![Link](link.png)
+![Link](link.png) 
