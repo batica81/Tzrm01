@@ -117,16 +117,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showCert() throws IOException, JSONException{
-
-
         myTextView.setText(sviSertifikati[0].toString());
-
     }
 
     private void killIt() throws IOException, JSONException{
-
-
         System.exit(0);
-
     }
 }
