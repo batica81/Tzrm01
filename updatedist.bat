@@ -1,3 +1,3 @@
-copy /Y app\build\outputs\apk\*.* dist\
+copy /Y app\build\outputs\apk\debug\*.apk dist\
 
 
