@@ -16,8 +16,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.security.cert.Certificate;
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,12 +49,10 @@ public class MainActivity extends AppCompatActivity {
         Button button2 = (Button) findViewById(R.id.button2);
         Button button3 = (Button) findViewById(R.id.button3);
 
-//todo: Ukljucivanje networking on main thread provere
+//todo: Ukljuciti networking on main thread proveru
 
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         button1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -57,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
                     e.printStackTrace();
                 }
             }
@@ -87,12 +95,21 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void makeSearch() throws IOException, JSONException {
+    private void makeSearch() throws IOException, JSONException, NoSuchAlgorithmException, KeyManagementException {
+
+        SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+        TrustManager[] trustManagers = new TrustManager[] { new TrustManagerManipulator() };        sslContext.init(null, trustManagers, new SecureRandom());
+        SSLSocketFactory noSSLv3Factory = new TLSSocketFactory(sslContext.getSocketFactory());
+
+
         username = String.valueOf(usernameEditText.getText());
         password = String.valueOf(passwordEditText.getText());
         String myUrl = String.valueOf(mSearchBoxEditText.getText());
         URL url = new URL(myUrl);
         HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+
+        urlConnection.setSSLSocketFactory(noSSLv3Factory);
+
         urlConnection.setRequestMethod("POST");
         urlConnection.setDoInput(true);
         urlConnection.setDoOutput(true);
