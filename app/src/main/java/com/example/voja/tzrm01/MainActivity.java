@@ -112,7 +112,8 @@ public class MainActivity extends AppCompatActivity {
     private void makeSearch() throws IOException, JSONException, NoSuchAlgorithmException, KeyManagementException {
 
         SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
-        TrustManager[] trustManagers = new TrustManager[] { new TrustManagerManipulator() };        sslContext.init(null, trustManagers, new SecureRandom());
+        TrustManager[] trustManagers = new TrustManager[] { new TrustManagerManipulator() };
+        sslContext.init(null, trustManagers, new SecureRandom());
         SSLSocketFactory noSSLv3Factory = new TLSSocketFactory(sslContext.getSocketFactory());
 
 
