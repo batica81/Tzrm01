@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.cedarsoftware.util.io.JsonWriter;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
@@ -60,12 +62,16 @@ public class MainActivity extends AppCompatActivity {
                     makeSearch();
                 } catch (IOException e) {
                     e.printStackTrace();
+                    displayExceptionMessage(e.getMessage());
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    displayExceptionMessage(e.getMessage());
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
+                    displayExceptionMessage(e.getMessage());
                 } catch (KeyManagementException e) {
                     e.printStackTrace();
+                    displayExceptionMessage(e.getMessage());
                 }
             }
         });
@@ -76,8 +82,10 @@ public class MainActivity extends AppCompatActivity {
                     showCert();
                 } catch (IOException e) {
                     e.printStackTrace();
+                    displayExceptionMessage(e.getMessage());
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    displayExceptionMessage(e.getMessage());
                 }
             }
         });
@@ -88,11 +96,17 @@ public class MainActivity extends AppCompatActivity {
                     killIt();
                 } catch (IOException e) {
                     e.printStackTrace();
+                    displayExceptionMessage(e.getMessage());
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    displayExceptionMessage(e.getMessage());
                 }
             }
         });
+    }
+
+    public void displayExceptionMessage(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     private void makeSearch() throws IOException, JSONException, NoSuchAlgorithmException, KeyManagementException {
