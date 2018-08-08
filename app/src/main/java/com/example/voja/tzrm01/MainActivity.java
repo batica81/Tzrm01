@@ -149,7 +149,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showCert() throws IOException, JSONException{
-        myTextView.setText(sviSertifikati[0].toString());
+        if (sviSertifikati != null) {
+            myTextView.setText(sviSertifikati[0].toString());
+        } else {
+            displayExceptionMessage("Nema sertifikata");
+        }
     }
 
     private void killIt() throws IOException, JSONException{
